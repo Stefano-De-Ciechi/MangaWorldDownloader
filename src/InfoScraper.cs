@@ -11,10 +11,10 @@ public class InfoScraper
         _url = url;
     }
 
-    private string GetHtml()        // return the html page containing the list of volumes and chapters of the manga
+    private string GetHtml(string url)        // return the html page containing the list of volumes and chapters of the manga
     {
         var client = new HttpClient();
-        var html = client.GetStringAsync(_url);
+        var html = client.GetStringAsync(url);
         
         return html.Result;
     }
@@ -40,12 +40,16 @@ public class InfoScraper
         foreach (var vol in volumes = volumes ?? Enumerable.Empty<Volume>())
         {
             Console.WriteLine($"{ vol.Name } : numChapters is { vol.Chapters.Count() }");
+            foreach (var chapt in vol.Chapters)
+            {
+                Console.WriteLine($"{ chapt.Name } has { chapt.NumPages } pages");
+            }
         }
 
         return res;
     }
 
-    private IEnumerable<Volume>? GetVolumes(HtmlNode document)
+    private IEnumerable<Volume> GetVolumes(HtmlNode document)
     {
         var volumeElements = document.GetElementsByClassName("volume-element");
         
@@ -61,7 +65,6 @@ public class InfoScraper
 
         return volumes;
     }
-
     private IEnumerable<Chapter> GetChapters(HtmlNode volumeElement)
     {
         var chapters = volumeElement.GetElementsByClassName("chapter");
@@ -69,16 +72,27 @@ public class InfoScraper
 
         foreach (var chapt in chapters)
         {
-            //var chaptName = chapt.FirstChild.FirstChild.InnerText;
-            //var releaseDate = chapt.FirstChild.InnerText;
             var chaptName = chapt.GetElementByTagName("span").InnerText;
             var releaseDate = chapt.GetElementByTagName("i").InnerText;
             var link = chapt.FirstChild.Attributes["href"].Value;
+            var numPages = GetChapterNumPages(link);
 
-            chaptersList.Add(new Chapter(chaptName, releaseDate, link));    // NumPages is set to zero for now  // TODO visit each link and retrieve the information on the number of pages
+            chaptersList.Add(new Chapter(chaptName, releaseDate, link, numPages));
         }
 
         return chaptersList;
+    }
+
+    private int GetChapterNumPages(string link)
+    {
+        var html = GetHtml(link);
+        var htmlDoc = new HtmlDocument();
+        htmlDoc.LoadHtml(html);
+
+        var document = htmlDoc.DocumentNode;
+
+        var pagesSelector = document.GetElementByClassName("page");
+        return pagesSelector.ChildNodes.Count();
     }
 
     private void PrintInfo(List<string> list)
@@ -91,7 +105,7 @@ public class InfoScraper
 
     public void Scrape()
     {
-        var html = GetHtml();
+        var html = GetHtml(_url);
         var list = ParseHtml(html);
         PrintInfo(list);
     }

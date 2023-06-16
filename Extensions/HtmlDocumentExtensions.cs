@@ -4,14 +4,7 @@ public static class HtmlDocumentExtensions
 {
     public static HtmlNode GetElementByClassName(this HtmlNode document, string className)
     {
-        //return document.SelectSingleNode($"//div[contains(@class, '{ className }')]");
-        var res = (
-            from node in document.Descendants()
-            where node.HasClass(className)
-            select node
-        ).First();
-        
-        return res;
+        return GetElementsByClassName(document, className).First();
     }
 
     public static IEnumerable<HtmlNode> GetElementsByClassName(this HtmlNode document, string className)
@@ -27,14 +20,7 @@ public static class HtmlDocumentExtensions
 
     public static HtmlNode GetElementByTagName(this HtmlNode document, string tagName)
     {
-        //return document.SelectNodes($"//div[contains(@class, '{ className }')]");
-        var res = (
-            from node in document.Descendants()
-            where node.Name == tagName
-            select node
-        ).First();
-
-        return res;
+        return GetElementsByTagName(document, tagName).First();
     }
 
     public static IEnumerable<HtmlNode> GetElementsByTagName(this HtmlNode document, string tagName)
