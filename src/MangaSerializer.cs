@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Scraper;
 
 public class MangaSerializer
@@ -13,11 +12,8 @@ public class MangaSerializer
 
     public async Task Serialize()
     {
-        var fileName = $"./scrapedMangas/{ _manga.Name }-info.json";
+        var fileName = $"../Data/info/{ _manga.Name }-info.json";
         var options = new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-        
-        //string json = JsonSerializer.Serialize<Manga>(_manga, options);
-        //Console.WriteLine(json);
 
         using FileStream createStream = File.Create(fileName);
         await JsonSerializer.SerializeAsync<Manga>(createStream, _manga, options);
