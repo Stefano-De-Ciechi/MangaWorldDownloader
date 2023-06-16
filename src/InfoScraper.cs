@@ -3,8 +3,6 @@ namespace Scraper;
 using HtmlAgilityPack;
 using System.Collections.Concurrent;
 
-// TODO generate a JSON file (based on the name scraped) containing all of the volumes info
-
 public class InfoScraper
 {
     private string _url;    // url of the manga's page with the chapters and volumes list
@@ -130,7 +128,8 @@ public class InfoScraper
         var firstPageLink = page.GetElementByTagName("img").Attributes["src"].Value;        // this link contains the url of the first page/image of the chapter
         var format = firstPageLink[^3..^0];     // retrieve the last 3 characters of the link (they should always be jpg or png)
 
-        if (format is not "jpg" or "png")
+        //if (format is not "jpg" or "png")
+        if (format != "jpg" && format != "png")
             throw new FormatException($"unknown format for the page found at { firstPageLink }");
 
         return (numPages, firstPageLink, format);

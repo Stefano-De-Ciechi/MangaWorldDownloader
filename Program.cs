@@ -1,6 +1,15 @@
 ﻿using Scraper;
 
-string url = (args.Length == 1) ? args[0] : "https://www.mangaworld.bz/manga/1392/cowboy-bebop";
+if (args.Length != 1)
+{
+    Console.WriteLine("need a link to presentation page of a manga from the site https://www.mangaworld.bz");
+    Environment.Exit(-1);
+}
+
+string url = args[0];
 
 var infoScaper = new InfoScraper(url);
-infoScaper.Scrape();
+var manga = infoScaper.Scrape();
+var serializer = new MangaSerializer(manga);
+
+await serializer.Serialize();
