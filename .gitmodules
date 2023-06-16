@@ -1,0 +1,6 @@
+[submodule "mangaScraper"]
+	path = mangaScraper
+	url = ./mangaScraper/
+[submodule "mangaDownloader"]
+	path = mangaDownloader
+	url = ./mangaDownloader/
