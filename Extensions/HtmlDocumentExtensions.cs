@@ -33,4 +33,9 @@ public static class HtmlDocumentExtensions
 
         return res;
     }
+
+    public static HtmlNode GetElementById(this HtmlNode document, string id)
+    {
+        return document.SelectSingleNode($"//*[@id='{ id }']");
+    }
 }

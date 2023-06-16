@@ -1,6 +1,9 @@
 namespace Scraper;
 
+using System.Collections.Concurrent;
 using HtmlAgilityPack;
+
+// TODO generate a JSON file (based on the name scraped) containing all of the volumes info
 
 public class InfoScraper
 {
@@ -27,44 +30,47 @@ public class InfoScraper
         return html;
     }
 
-    private List<string> ParseHtml(string html)     // parse the html of the page containing the list of volumes and chapters
+    private Manga ParseHtml(string html)     // parse the html of the page containing the list of volumes and chapters
     {
         var htmlDoc = new HtmlDocument();
         htmlDoc.LoadHtml(html);
 
         var document = htmlDoc.DocumentNode;
-        var res = new List<string>();
+
+        var mangaName = GetMangaName(document);
 
         var volumes = GetVolumes(document);
+        volumes = volumes.OrderBy(volume => volume.Name);
         
-        foreach (var vol in volumes = volumes ?? Enumerable.Empty<Volume>())
-        {
-            Console.WriteLine($"{ vol.Name } : numChapters is { vol.Chapters.Count() }");
-            foreach (var chapt in vol.Chapters)
-            {
-                Console.WriteLine($"{ chapt.Name } has { chapt.NumPages } pages");
-            }
-        }
+        return new Manga(mangaName, volumes);
+    }
 
-        return res;
+    private string GetMangaName(HtmlNode document)
+    {
+        var info = document.GetElementByClassName("info");
+        var h1 = info.GetElementByTagName("h1");
+        
+        return h1.InnerText;
     }
 
     private IEnumerable<Volume> GetVolumes(HtmlNode document)
     {
         var volumeElements = document.GetElementsByClassName("volume-element");
         
-        List<Volume> volumes = new();
+        var volumes = new ConcurrentBag<Volume>();
 
-        foreach(var volumeElement in volumeElements)
+        Parallel.ForEach(volumeElements, volumeElement =>
         {
             var volumeName = volumeElement.GetElementsByTagName("p").First().InnerText;
             var volumeChapters = GetChapters(volumeElement);
+            volumeChapters = volumeChapters.OrderBy(chapter => chapter.Name);
 
             volumes.Add(new Volume(volumeName, volumeChapters));
-        }
+        });
 
         return volumes;
     }
+
     private IEnumerable<Chapter> GetChapters(HtmlNode volumeElement)
     {
         var chapters = volumeElement.GetElementsByClassName("chapter");
@@ -75,15 +81,16 @@ public class InfoScraper
             var chaptName = chapt.GetElementByTagName("span").InnerText;
             var releaseDate = chapt.GetElementByTagName("i").InnerText;
             var link = chapt.FirstChild.Attributes["href"].Value;
-            var numPages = GetChapterNumPages(link);
 
-            chaptersList.Add(new Chapter(chaptName, releaseDate, link, numPages));
+            var (numPages, firstPageLink, format) = GetChapterPagesInfo(link);
+
+            chaptersList.Add(new Chapter(chaptName, releaseDate, numPages, firstPageLink, format));
         }
 
         return chaptersList;
     }
 
-    private int GetChapterNumPages(string link)
+    private (int numPages, string firstPageLink, string format) GetChapterPagesInfo(string link)
     {
         var html = GetHtml(link);
         var htmlDoc = new HtmlDocument();
@@ -92,36 +99,47 @@ public class InfoScraper
         var document = htmlDoc.DocumentNode;
 
         var pagesSelector = document.GetElementByClassName("page");
-        return pagesSelector.ChildNodes.Count();
-    }
+        var numPages = pagesSelector.ChildNodes.Count();
 
-    private void PrintInfo(List<string> list)
-    {
-        foreach (var i in list)
-        {
-            Console.WriteLine(i);
-        }
+        var page = document.GetElementById("page");
+        var firstPageLink = page.GetElementByTagName("img").Attributes["src"].Value;
+        var format = firstPageLink[^3..^0];
+
+        return (numPages, firstPageLink, format);
     }
 
     public void Scrape()
     {
         var html = GetHtml(_url);
-        var list = ParseHtml(html);
-        PrintInfo(list);
+        var manga = ParseHtml(html);
+
+        PrintMangaInfo(manga);
+    }
+
+    private void PrintMangaInfo(Manga manga)
+    {
+        Console.WriteLine($"\nname: { manga.Name }");
+
+        var volumes = manga.Volumes;
+
+        foreach (var vol in volumes = volumes ?? Enumerable.Empty<Volume>())
+        {
+            Console.WriteLine($"\n===== { vol.Name } - { vol.Chapters.Count() } chapters =====");
+            
+            foreach (var chapt in vol.Chapters)
+            {
+                Console.WriteLine($"{ chapt.Name } - { chapt.NumPages } pages");
+            }
+        }
     }
 }
 
+record Manga(string Name, IEnumerable<Volume> Volumes);
+
 record Volume
 {
-    //public int Number { get; init; }
     public string Name { get; init; }
     public IEnumerable<Chapter> Chapters { get; init; }
-
-    /*public Volume(int number, IEnumerable<Chapter> chapters)
-    {
-        Number = number;
-        Chapters = chapters;
-    }*/
 
     public Volume(string name, IEnumerable<Chapter> chapters)
     {
@@ -132,37 +150,18 @@ record Volume
 
 record Chapter
 {
-    //public int Number { get; init; }
     public string Name { get; init; }
     public string ReleaseDate { get; init; }
-    public string Link { get; init; }
     public int NumPages { get; set; }
+    public string FirstPageLink { get; init; }
+    public string FirstPageFormat { get; init; } 
 
-    /*public Chapter(int number, string releaseDate, string link, int numPages)
-    {
-        Number = number;
-        ReleaseDate = releaseDate;
-        Link = link;
-        NumPages = numPages;
-    }*/
-
-    public Chapter(string name, string releaseDate, string link, int numPages = 0)
+    public Chapter(string name, string releaseDate, int numPages, string firstPageLink, string firstPageFormat)
     {
         Name = name;
         ReleaseDate = releaseDate;
-        Link = link;
         NumPages = numPages;
-    }
-}
-
-record Page
-{
-    public string Format { get; init; }
-    public string Link { get; init; }
-
-    public Page(string format, string link)
-    {
-        Format = format;
-        Link = link;
+        FirstPageLink = firstPageLink;
+        FirstPageFormat = firstPageFormat;
     }
 }
