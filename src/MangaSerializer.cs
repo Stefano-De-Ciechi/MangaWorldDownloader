@@ -12,7 +12,7 @@ public class MangaSerializer
 
     public async Task Serialize()
     {
-        var fileName = $"../Data/info/{ _manga.Name }-info.json";
+        var fileName = $"../Data/info/{ _manga.Name }-info.json";       // TODO make the path platform indepentent (and maybe cofigurable from a .env, .cfg or other configuration files)
         var options = new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         using FileStream createStream = File.Create(fileName);

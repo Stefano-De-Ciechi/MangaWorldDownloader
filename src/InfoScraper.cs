@@ -128,7 +128,6 @@ public class InfoScraper
         var firstPageLink = page.GetElementByTagName("img").Attributes["src"].Value;        // this link contains the url of the first page/image of the chapter
         var format = firstPageLink[^3..^0];     // retrieve the last 3 characters of the link (they should always be jpg or png)
 
-        //if (format is not "jpg" or "png")
         if (format != "jpg" && format != "png")
             throw new FormatException($"unknown format for the page found at { firstPageLink }");
 
