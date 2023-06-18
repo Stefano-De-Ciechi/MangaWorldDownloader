@@ -1,4 +1,4 @@
-namespace Downloader;
+namespace MangaWorld.Downloader;
 
 // TODO make all paths platform independent (and maybe configurable from a .env, a .cfg or other configuration files)
 

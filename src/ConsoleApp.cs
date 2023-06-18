@@ -1,4 +1,4 @@
-namespace Downloader;
+namespace MangaWorld.Downloader;
 
 /*
     class that shows a sort of CLI menu to choose one of these options:
