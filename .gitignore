@@ -1,2 +1,4 @@
 Data/
 .vscode/
+mangaWorld.core/obj/*
+mangaWorld.core/bin/*

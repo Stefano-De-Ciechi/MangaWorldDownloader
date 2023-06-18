@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mangaScraper", "mangaScrape
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mangaDownloader", "mangaDownloader\mangaDownloader.csproj", "{2AEFAF90-6932-4FEE-80BB-C409E54FD0DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mangaWorld.core", "mangaWorld.core\mangaWorld.core.csproj", "{BDB9036D-18D1-484B-8FE0-669EC1799E40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{2AEFAF90-6932-4FEE-80BB-C409E54FD0DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AEFAF90-6932-4FEE-80BB-C409E54FD0DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AEFAF90-6932-4FEE-80BB-C409E54FD0DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDB9036D-18D1-484B-8FE0-669EC1799E40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDB9036D-18D1-484B-8FE0-669EC1799E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDB9036D-18D1-484B-8FE0-669EC1799E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDB9036D-18D1-484B-8FE0-669EC1799E40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
