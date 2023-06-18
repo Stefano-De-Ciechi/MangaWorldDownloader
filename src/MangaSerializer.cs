@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Scraper;
+using MangaWorld.core;
 
 public class MangaSerializer
 {

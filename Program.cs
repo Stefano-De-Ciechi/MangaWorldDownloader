@@ -1,4 +1,4 @@
-﻿using Scraper;
+﻿using MangaWorld.Scraper;
 
 if (args.Length != 1)
 {

@@ -1,7 +1,8 @@
-namespace Scraper;
+namespace MangaWorld.Scraper;
 
 using HtmlAgilityPack;
 using System.Collections.Concurrent;
+using MangaWorld.core;
 
 public class InfoScraper
 {
