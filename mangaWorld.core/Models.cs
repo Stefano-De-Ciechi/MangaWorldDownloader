@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace MangaWorld.core;
+namespace MangaWorld.Core;
 
 public record Manga
 {
@@ -12,6 +12,11 @@ public record Manga
     {
         Name = name;
         Volumes = volumes;
+    }
+
+    public Volume? this[string volumeName]      // indexer for retrieving a Volume given it's name
+    {
+        get => Volumes.FirstOrDefault(volume => volume.Name.Equals(volumeName));
     }
 }
 
@@ -25,6 +30,11 @@ public record Volume
     {
         Name = name;
         Chapters = chapters;
+    }
+
+    public Chapter? this[string chapterName]
+    {
+        get => Chapters.FirstOrDefault(chapter => chapter.Name.Equals(chapterName));
     }
 }
 
