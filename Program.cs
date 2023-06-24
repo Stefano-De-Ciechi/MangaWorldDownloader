@@ -1,4 +1,5 @@
 ﻿using MangaWorld.Scraper;
+using MangaWorld.Core;
 
 if (args.Length != 1)
 {
@@ -10,6 +11,5 @@ string url = args[0];
 
 var infoScaper = new InfoScraper(url);
 var manga = infoScaper.Scrape();
-var serializer = new MangaSerializer(manga);
 
-await serializer.Serialize();
+await MangaSerializer.Serialize(manga);

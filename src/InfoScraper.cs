@@ -2,7 +2,7 @@ namespace MangaWorld.Scraper;
 
 using HtmlAgilityPack;
 using System.Collections.Concurrent;
-using MangaWorld.core;
+using MangaWorld.Core;
 
 public class InfoScraper
 {
@@ -129,7 +129,7 @@ public class InfoScraper
         var firstPageLink = page.GetElementByTagName("img").Attributes["src"].Value;        // this link contains the url of the first page/image of the chapter
         var format = firstPageLink[^3..^0];     // retrieve the last 3 characters of the link (they should always be jpg or png)
 
-        if (format != "jpg" && format != "png")
+        if (format != "jpg" && format != "png" && format != "gif")
             throw new FormatException($"unknown format for the page found at { firstPageLink }");
 
         return (numPages, firstPageLink, format);
