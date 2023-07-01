@@ -1,6 +1,6 @@
 [submodule "mangaScraper"]
 	path = mangaScraper
-	url = ./mangaScraper/
+	url = https://github.com/Stefano-De-Ciechi/mangaScraper.git
 [submodule "mangaDownloader"]
 	path = mangaDownloader
-	url = ./mangaDownloader/
+	url = https://github.com/Stefano-De-Ciechi/mangaDownloader.git
