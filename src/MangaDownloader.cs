@@ -12,6 +12,7 @@ public class MangaDownloader
     private Manga? _manga;
     private HttpClient _httpClient;
 
+    // TODO make the path of the info.json files settable too (like the download path)
     public MangaDownloader(string fileName, string? downloadPath = null)
     {
         _downloadPath = downloadPath ?? $"..{ _separator }Data{ _separator }downloads{ _separator }";
