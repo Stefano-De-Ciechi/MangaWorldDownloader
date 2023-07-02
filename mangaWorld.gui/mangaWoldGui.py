@@ -4,7 +4,6 @@ import os
 import subprocess
 
 # TODO implement a progress bar by counting the current downloaded number of pages in relation to the total length of the selected volumes or chapters
-# TODO change executable with dotnet run (to ensure that the application gets rebuilt every time ?? slow method)
 # TODO implement gui elements for the manga scraper too
 
 # https://janakiev.com/blog/python-shell-commands/#using-the-subprocess-module
@@ -12,13 +11,16 @@ import subprocess
 
 # needed code
 dpg.create_context()
-dpg.create_viewport(title='manga downloader', width=1010, height=600)
+dpg.create_viewport(title='manga downloader', width=1100, height=600)
 dpg.set_viewport_vsync(True)
 
 # custom code here ===================================
 
-PATH = "/mnt/ntfs/Condivisione_Ubuntu/Programmazione Dece/C#_projects/MangaWorldDownloader/Data/info/"
-DOWNLOADER_EXECUTABLE = "/mnt/ntfs/Condivisione_Ubuntu/Programmazione Dece/C#_projects/MangaWorldDownloader/mangaDownloader/bin/Debug/net7.0/mangaDownloader"
+#PATH = "/mnt/ntfs/Condivisione_Ubuntu/Programmazione Dece/C#_projects/MangaWorldDownloader/Data/info/"
+#DOWNLOADER_EXECUTABLE = "/mnt/ntfs/Condivisione_Ubuntu/Programmazione Dece/C#_projects/MangaWorldDownloader/mangaDownloader/bin/Debug/net7.0/mangaDownloader"
+
+PATH = "../Data/info/"
+DOWNLOADER_EXECUTABLE = "../mangaDownloader/bin/Debug/net7.0/mangaDownloader"       # TODO change executable with dotnet run (to ensure that the application gets rebuilt every time ?? slow method)
 
 selected_manga_name = []
 selected_volumes = []
@@ -114,7 +116,7 @@ def execute_command():
     dpg.delete_item("output-window")
 
     # create the output window
-    output_window = dpg.add_window(tag = "output-window", label = "output", width = 400, height = 300, pos = (10 + 250 + 20 + 300 + 20, 10))
+    output_window = dpg.add_window(tag = "output-window", label = "output", width = 490, height = 300, pos = (10 + 250 + 20 + 300 + 20, 10))
 
     # start the execution of the manga downloader program
     #args = ['bash', 'test.sh']
@@ -134,6 +136,8 @@ def execute_command():
         if len(output) != 0:
             print(output)
             dpg.add_text(output, parent = "output-window")
+            scroll = dpg.get_y_scroll_max("output-window")
+            dpg.set_y_scroll("output-window", scroll)
 
         return_code = process.poll()        # ask to the program if the execution has stopped or not
         if return_code is not None:
