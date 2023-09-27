@@ -1,6 +1,0 @@
-[submodule "mangaScraper"]
-	path = mangaScraper
-	url = https://github.com/Stefano-De-Ciechi/mangaScraper.git
-[submodule "mangaDownloader"]
-	path = mangaDownloader
-	url = https://github.com/Stefano-De-Ciechi/mangaDownloader.git
