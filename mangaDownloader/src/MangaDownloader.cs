@@ -71,7 +71,16 @@ public class MangaDownloader
         for (int i = 1; i <= chapter.NumPages; i++)
         {
             var link = chapter.FirstPageLink.Replace(chapter.FirstPageLink[^5..^0], $"{i}.{chapter.FirstPageFormat}");
-            await DownloadImage(_manga.Name, volume.Name, chapter.Name, i, link);
+            try
+            {
+                await DownloadImage(_manga.Name, volume.Name, chapter.Name, i, link);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"EXCEPTION: {e.Message}");
+                Console.WriteLine($"skipping this page...");
+            }
+            
         }
 
         // even by using Parallel, it doesn't see to download much faster (sometimes even slower)
@@ -102,7 +111,7 @@ public class MangaDownloader
 
         if (status == true)
         {
-            Console.WriteLine($"succesfully downloaded { debugMsg }");
+            Console.WriteLine($"successfully downloaded { debugMsg }");
             return;
         }
 
@@ -124,7 +133,7 @@ public class MangaDownloader
 
         if (status == true)
         {
-            Console.WriteLine($"succesfully downloaded { debugMsg }");
+            Console.WriteLine($"successfully downloaded { debugMsg }");
             return;
         }
 

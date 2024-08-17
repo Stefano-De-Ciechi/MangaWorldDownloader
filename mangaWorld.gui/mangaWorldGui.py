@@ -16,8 +16,8 @@ dpg.set_viewport_vsync(True)
 # custom code here ===================================
 
 PATH = "../Data/info/"
-DOWNLOADER_EXECUTABLE = "../mangaDownloader/bin/Debug/net7.0/mangaDownloader"       # TODO change executable with dotnet run (to ensure that the application gets rebuilt every time ?? slow method)
-SCRAPER_EXECUTABLE = "../mangaScraper/bin/Debug/net7.0/mangaScraper"
+DOWNLOADER_EXECUTABLE = "../mangaDownloader/bin/Debug/net8.0/mangaDownloader"       # TODO change executable with dotnet run (to ensure that the application gets rebuilt every time ?? slow method)
+SCRAPER_EXECUTABLE = "../mangaScraper/bin/Debug/net8.0/mangaScraper"
 
 selected_manga_name = []
 selected_volumes = []
