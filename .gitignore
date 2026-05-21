@@ -3,3 +3,7 @@ Data/
 .idea/
 mangaWorld.core/obj/*
 mangaWorld.core/bin/*
+*/bin/*
+*/obj/*
+*.bak
+*.DotSettings.user
